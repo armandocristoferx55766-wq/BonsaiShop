@@ -1,0 +1,267 @@
+﻿
+@model IEnumerable<BonsaiShop.Product>
+
+@{
+    ViewBag.Title = "Quản lý sản phẩm";
+
+    string currentSort = ViewBag.CurrentSort as string ?? "";
+    string searchString = ViewBag.SearchString as string ?? "";
+
+    int currentPage = ViewBag.PageNumber == null
+        ? 1 : (int)ViewBag.PageNumber;
+
+    int totalPages = ViewBag.TotalPages == null
+        ? 0 : (int)ViewBag.TotalPages;
+
+    int? categoryId = ViewBag.CategoryId == null
+        ? (int?)null : (int)ViewBag.CategoryId;
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">QUẢN LÝ SẢN PHẨM BONSAI</h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-success text-white">
+            @if (ViewBag.CategoryName != null)
+            {
+                <span>Sản phẩm thuộc danh mục: @ViewBag.CategoryName</span>
+            }
+            else
+            {
+                <span>Danh sách sản phẩm</span>
+            }
+        </div>
+
+        <div class="card-body">
+
+            <!-- NÚT THÊM SẢN PHẨM -->
+            <div class="mb-3">
+                <a href="@Url.Action("Create", "Products")"
+                   class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i>
+                    Thêm sản phẩm
+                </a>
+
+                @if (categoryId.HasValue)
+                {
+                    <a href="@Url.Action("Index", "Products")"
+                       class="btn btn-outline-secondary ms-2">
+                        Xem tất cả sản phẩm
+                    </a>
+                }
+            </div>
+
+            <!-- FORM TÌM KIẾM -->
+            <form method="get"
+                  action="@Url.Action("Index", "Products")"
+                  class="mb-4">
+
+                <input type="hidden"
+                       name="sortOrder"
+                       value="@currentSort" />
+
+                @if (categoryId.HasValue)
+                {
+                    <input type="hidden"
+                           name="categoryId"
+                           value="@categoryId" />
+                }
+
+                <div class="input-group">
+
+                    <input type="text"
+                           name="searchString"
+                           value="@searchString"
+                           class="form-control"
+                           placeholder="Nhập tên sản phẩm cần tìm..." />
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        <i class="bi bi-search"></i>
+                        Tìm kiếm
+                    </button>
+
+                    <a href="@Url.Action("Index", "Products",
+                        new { categoryId = categoryId })"
+                       class="btn btn-secondary">
+                        Làm mới
+                    </a>
+
+                </div>
+            </form>
+
+            <!-- BẢNG DANH SÁCH SẢN PHẨM -->
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead class="table-success">
+
+                        <tr>
+                            <th>Mã SP</th>
+
+                            <th>
+                                <a href="@Url.Action("Index", "Products",
+                                    new {
+                                        searchString = searchString,
+                                        sortOrder = ViewBag.NameSortParm,
+                                        categoryId = categoryId
+                                    })"
+                                   class="text-dark text-decoration-none">
+                                    Tên sản phẩm
+                                    <i class="bi bi-arrow-down-up"></i>
+                                </a>
+                            </th>
+
+                            <th>Danh mục</th>
+
+                            <th>
+                                <a href="@Url.Action("Index", "Products",
+                                    new {
+                                        searchString = searchString,
+                                        sortOrder = ViewBag.PriceSortParm,
+                                        categoryId = categoryId
+                                    })"
+                                   class="text-dark text-decoration-none">
+                                    Giá
+                                    <i class="bi bi-arrow-down-up"></i>
+                                </a>
+                            </th>
+
+                            <th>Số lượng</th>
+
+                            <th>Mô tả</th>
+
+                            <th>Thao tác</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>@item.ProductID</td>
+
+                                    <td>@item.ProductName</td>
+
+                                    <td>
+                                        @(item.Category != null
+                                            ? item.Category.CategoryName
+                                            : "Chưa phân loại")
+                                    </td>
+
+                                    <td>
+                                        @item.Price.ToString("N0") VNĐ
+                                    </td>
+
+                                    <td>@item.Quantity</td>
+
+                                    <td>@item.Description</td>
+
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Products",
+                                            new { id = item.ProductID })"
+                                           class="btn btn-warning btn-sm">
+                                            Sửa
+                                        </a>
+
+                                        <a href="@Url.Action("Delete", "Products",
+                                            new { id = item.ProductID })"
+                                           class="btn btn-danger btn-sm">
+                                            Xóa
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-danger">
+                                    Không tìm thấy sản phẩm nào!
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- PHÂN TRANG -->
+            @if (totalPages > 1)
+            {
+                <nav aria-label="Phân trang sản phẩm">
+
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item @(currentPage <= 1 ? "disabled" : "")">
+
+                            <a class="page-link"
+                               href="@Url.Action("Index", "Products",
+                                   new {
+                                       searchString = searchString,
+                                       sortOrder = currentSort,
+                                       page = currentPage - 1,
+                                       categoryId = categoryId
+                                   })">
+                                Trước
+                            </a>
+
+                        </li>
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+
+                                <a class="page-link"
+                                   href="@Url.Action("Index", "Products",
+                                       new {
+                                           searchString = searchString,
+                                           sortOrder = currentSort,
+                                           page = i,
+                                           categoryId = categoryId
+                                       })">
+                                    @i
+                                </a>
+
+                            </li>
+                        }
+
+                        <li class="page-item @(currentPage >= totalPages ? "disabled" : "")">
+
+                            <a class="page-link"
+                               href="@Url.Action("Index", "Products",
+                                   new {
+                                       searchString = searchString,
+                                       sortOrder = currentSort,
+                                       page = currentPage + 1,
+                                       categoryId = categoryId
+                                   })">
+                                Tiếp
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+            }
+
+            <div class="text-center text-muted">
+                Trang @currentPage / @totalPages
+            </div>
+
+        </div>
+    </div>
+
+</div>

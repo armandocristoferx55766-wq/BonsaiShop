@@ -1,0 +1,384 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>@ViewBag.Title - Em Không Sai, Bonsai</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        /* NAVBAR */
+        .bonsai-navbar {
+            background: #173D2B;
+            padding: 12px 0;
+        }
+
+        .bonsai-brand {
+            color: white !important;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .bonsai-navbar .nav-link {
+            color: white !important;
+            font-weight: 600;
+            margin: 0 7px;
+            transition: 0.3s;
+        }
+
+            .bonsai-navbar .nav-link:hover {
+                color: #a8e6b5 !important;
+            }
+
+        .bonsai-navbar .navbar-toggler {
+            border-color: white;
+        }
+
+        .bonsai-navbar .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        /* NÚT ĐĂNG KÝ */
+        .bonsai-navbar .nav-link.nav-account {
+            background: #ffffff;
+            color: #000000 !important;
+            border-radius: 20px;
+            padding: 8px 15px !important;
+            margin-left: 5px;
+        }
+
+            .bonsai-navbar .nav-link.nav-account:hover {
+                background: #dcebdd;
+                color: #000000 !important;
+            }
+
+        /* NÚT ĐĂNG XUẤT */
+        .nav-logout {
+            background: #a83232;
+            color: white !important;
+            border-radius: 20px;
+            padding: 8px 15px !important;
+        }
+
+            .nav-logout:hover {
+                background: #842727;
+            }
+
+        .body-content {
+            min-height: 65vh;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        /* FOOTER */
+        .bonsai-footer {
+            background: #173D2B;
+            color: white;
+            padding: 45px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-title {
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .footer-heading {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #d5edda;
+        }
+
+        .footer-text {
+            color: #dcebdd;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .footer-links li {
+                margin-bottom: 10px;
+            }
+
+            .footer-links a {
+                color: #dcebdd;
+                text-decoration: none;
+                font-size: 14px;
+                transition: 0.3s;
+            }
+
+                .footer-links a:hover {
+                    color: #a8e6b5;
+                    padding-left: 5px;
+                }
+
+        .footer-contact {
+            color: #dcebdd;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #557563;
+            margin-top: 30px;
+            padding-top: 18px;
+            text-align: center;
+            color: #dcebdd;
+            font-size: 13px;
+        }
+
+        .footer-icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- THANH ĐIỀU HƯỚNG -->
+    <nav class="navbar navbar-expand-lg bonsai-navbar">
+        <div class="container">
+
+            <a class="navbar-brand bonsai-brand"
+               href="@Url.Action("Index", "Home")">
+                🌳 Em Không Sai, Bonsai
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#bonsaiNavbar"
+                    aria-controls="bonsaiNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="bonsaiNavbar">
+
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="@Url.Action("Index", "Home")">
+                            Trang chủ
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="@Url.Action("Index", "Products")">
+                            Sản phẩm
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="@Url.Action("Index", "Cart")">
+                            <i class="bi bi-cart3"></i>
+                            Giỏ hàng
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav align-items-lg-center">
+
+                    @if (Session["UserID"] == null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="@Url.Action("Login", "Account")">
+                                Đăng nhập
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-account"
+                               href="@Url.Action("Register", "Account")">
+                                Đăng ký
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link">
+                                Xin chào, @Session["FullName"]
+                            </span>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-logout"
+                               href="@Url.Action("Logout", "Account")">
+                                Đăng xuất
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- NỘI DUNG TRANG -->
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bonsai-footer">
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- GIỚI THIỆU -->
+                <div class="col-md-4 mb-4">
+
+                    <h3 class="footer-title">
+                        🌳 Em Không Sai, Bonsai
+                    </h3>
+
+                    <p class="footer-text">
+                        Nghệ thuật bonsai – Mang thiên nhiên
+                        và vẻ đẹp xanh đến không gian sống
+                        của bạn.
+                    </p>
+
+                    <p class="footer-text">
+                        Nơi hội tụ những tác phẩm bonsai
+                        độc đáo và đầy nghệ thuật.
+                    </p>
+
+                </div>
+
+                <!-- LIÊN KẾT -->
+                <div class="col-md-2 mb-4">
+
+                    <h5 class="footer-heading">
+                        Liên kết nhanh
+                    </h5>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="@Url.Action("Index", "Home")">
+                                Trang chủ
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("Index", "Products")">
+                                Sản phẩm
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("About", "Home")">
+                                Giới thiệu
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("Contact", "Home")">
+                                Liên hệ
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- HỖ TRỢ -->
+                <div class="col-md-3 mb-4">
+
+                    <h5 class="footer-heading">
+                        Hỗ trợ khách hàng
+                    </h5>
+
+                    <ul class="footer-links">
+
+                        <li>
+                            <a href="#">
+                                Hướng dẫn mua hàng
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Chính sách giao hàng
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                Chính sách đổi trả
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <!-- THÔNG TIN LIÊN HỆ -->
+                <div class="col-md-3 mb-4">
+
+                    <h5 class="footer-heading">
+                        Thông tin liên hệ
+                    </h5>
+
+                    <p class="footer-contact">
+                        📍 441 Đống Đa, Hà Nội
+                    </p>
+
+                    <p class="footer-contact">
+                        📞 0762178534
+                    </p>
+
+                    <p class="footer-contact">
+                        ✉ emkhongsaibonsai@gmail.com
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- BẢN QUYỀN -->
+            <div class="footer-bottom">
+
+                &copy; @DateTime.Now.Year Em Không Sai, Bonsai.
+                All rights reserved.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

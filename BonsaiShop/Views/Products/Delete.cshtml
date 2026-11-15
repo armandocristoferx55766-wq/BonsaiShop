@@ -1,0 +1,75 @@
+﻿
+@model BonsaiShop.Product
+
+@{
+    ViewBag.Title = "Xóa sản phẩm";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 text-danger">XÓA SẢN PHẨM</h2>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-danger text-white">
+            Xác nhận xóa sản phẩm
+        </div>
+
+        <div class="card-body">
+
+            <div class="alert alert-warning">
+                Bạn có chắc chắn muốn xóa sản phẩm này không?
+                Hành động này không thể hoàn tác.
+            </div>
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Mã sản phẩm</th>
+                    <td>@Model.ProductID</td>
+                </tr>
+
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <td>@Model.ProductName</td>
+                </tr>
+
+                <tr>
+                    <th>Danh mục</th>
+                    <td>
+                        @(Model.Category != null
+                            ? Model.Category.CategoryName
+                            : "Chưa phân loại")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Giá</th>
+                    <td>@Model.Price.ToString("N0") VNĐ</td>
+                </tr>
+
+                <tr>
+                    <th>Số lượng</th>
+                    <td>@Model.Quantity</td>
+                </tr>
+
+            </table>
+
+            @using (Html.BeginForm("Delete", "Products",
+                new { id = Model.ProductID }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-danger">
+                    Xác nhận xóa
+                </button>
+
+                <a href="@Url.Action("Index", "Products")"
+                   class="btn btn-secondary">
+                    Hủy
+                </a>
+            }
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,161 @@
+﻿
+@model BonsaiShop.Order
+
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+}
+
+<style>
+    .success-container {
+        max-width: 750px;
+        margin: 50px auto;
+        padding: 35px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .success-icon {
+        width: 85px;
+        height: 85px;
+        background: #e5f4e9;
+        color: #245c36;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 45px;
+        margin: 0 auto 20px;
+    }
+
+    .success-title {
+        color: #245c36;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .success-text {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    .order-info {
+        background: #f5f8f3;
+        border-radius: 12px;
+        padding: 22px;
+        text-align: left;
+        margin-top: 25px;
+    }
+
+        .order-info h5 {
+            color: #245c36;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+    .order-code {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .total-price {
+        color: #dc3545;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .home-btn {
+        background: #245c36;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 7px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 25px;
+        font-weight: bold;
+    }
+
+        .home-btn:hover {
+            background: #174326;
+            color: white;
+        }
+</style>
+
+<div class="container mb-5">
+
+    <div class="success-container">
+
+        <div class="success-icon">
+            <i class="bi bi-check-lg"></i>
+        </div>
+
+        <h2 class="success-title">
+            ĐẶT HÀNG THÀNH CÔNG!
+        </h2>
+
+        <p class="success-text">
+            Cảm ơn bạn đã tin tưởng và mua sắm tại
+            <strong>Em Không Sai, Bonsai</strong>.
+            Chúng tôi sẽ sớm liên hệ để xác nhận đơn hàng của bạn.
+        </p>
+
+        <div class="order-info">
+
+            <h5>
+                <i class="bi bi-receipt"></i>
+                Thông tin đơn hàng
+            </h5>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Mã đơn hàng:</span>
+                <span class="order-code">
+                    #@Model.OrderID
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Ngày đặt hàng:</span>
+                <strong>
+                    @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                </strong>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Số điện thoại:</span>
+                <strong>@Model.Phone</strong>
+            </div>
+
+            <div class="mb-3">
+                <span>Địa chỉ giao hàng:</span>
+                <p class="fw-bold mt-2 mb-0">
+                    @Model.ShippingAddress
+                </p>
+            </div>
+
+            <hr />
+
+            <div class="d-flex justify-content-between mb-3">
+                <span>Trạng thái:</span>
+                <span class="badge bg-warning text-dark">
+                    @Model.Status
+                </span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <strong>Tổng thanh toán:</strong>
+                <span class="total-price">
+                    @String.Format("{0:N0} VNĐ", Model.TotalAmount)
+                </span>
+            </div>
+
+        </div>
+
+        <a href="@Url.Action("Index", "Home")" class="home-btn">
+            <i class="bi bi-house-door"></i>
+            Quay về trang chủ
+        </a>
+
+    </div>
+
+</div>
